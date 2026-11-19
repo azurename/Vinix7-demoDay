@@ -1,0 +1,35 @@
+﻿<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Eksplorasi preferensi lokasi kerja mahasiswa Gen Z.">
+<title>Vinix7 · Preferensi Lokasi Kerja</title>
+<link rel="stylesheet" href="style.css">
+<script src="app.js" type="module"></script>
+</head>
+<body>
+<header><div class="wrap nav"><a class="brand" href="#beranda"><span class="mark">V</span> Vinix7</a><nav aria-label="Navigasi utama"><a href="#beranda">Beranda</a><a href="#individu">Satu responden</a><a href="#excel">Unggah Excel</a></nav></div></header>
+<main id="main">
+<section id="beranda" class="screen">
+<div class="hero"><div class="wrap hero-grid">
+<div><p class="eyebrow">RISET MAHASISWA GEN Z</p><h1>Memahami pilihan<br>lokasi kerja Gen Z.</h1><p class="intro">Jelajahi preferensi Hybrid, Onsite, dan Remote berdasarkan gaya kerja, motivasi, kultur, dan nilai kerja.</p>
+<div class="actions"><a class="button" href="#individu">Prediksi satu responden</a><a class="button secondary" href="#excel">Unggah Excel</a></div></div>
+<div class="sample" id="home-result"></div>
+</div></div>
+<div class="wrap modes"><div><h2>Pilih cara memasukkan data</h2><p>Mulai dari satu profil atau periksa beberapa baris sekaligus.</p></div><a href="#individu"><strong>Satu responden</strong><span>Isi profil melalui formulir.</span></a><a href="#excel"><strong>Banyak responden</strong><span>Siapkan data menggunakan templat Excel.</span></a></div>
+</section>
+<section id="individu" class="screen wrap" hidden>
+<div class="page-head"><h1>Prediksi satu responden</h1><p>Isi profil untuk melihat contoh penyajian hasil.</p></div>
+<div class="columns"><form id="profile" class="panel"><h2>Profil responden</h2><div id="fields"></div><details><summary>Profil tambahan (opsional)</summary><div class="optional"><label>Ukuran perusahaan<input name="company_size"></label><label>Gaya kognitif<input name="cognitive_style"></label></div></details><p id="form-message" class="error" role="alert"></p><button class="button" type="submit">Tampilkan contoh hasil</button></form>
+<div><div class="sample" id="profile-result" aria-live="polite"><p class="eyebrow">HASIL PREDIKSI</p><h2>Hasil akan muncul di sini</h2><p>Lengkapi formulir untuk melihat bagaimana hasil ditampilkan.</p></div></div></div>
+</section>
+<section id="excel" class="screen wrap" hidden>
+<div class="page-head"><h1>Prediksi banyak responden</h1><p>Unggah data Excel untuk memeriksa kolom dan isi setiap baris.</p></div>
+<div class="columns"><div class="panel"><h2>Unggah data Excel</h2><div id="drop" class="drop"><strong>Tarik dan letakkan data Excel di sini</strong><p>Format .xlsx · Maksimal 10 MB</p><label class="button" for="workbook">Pilih Excel</label><input type="file" id="workbook" accept=".xlsx" class="visually-hidden"></div><p id="upload-status" role="status" aria-live="polite"></p></div>
+<aside class="panel"><h2>Siapkan data</h2><ol><li>Unduh templat Excel.</li><li>Isi satu responden per baris.</li><li>Pisahkan beberapa nilai kerja dengan koma.</li></ol><a href="templat-vinix7.xlsx" download class="button secondary">Unduh templat Excel</a><p class="note">Gunakan profil anonim. File dibaca di browser.</p></aside></div>
+<div class="panel preview" id="preview" hidden><h2>Pratinjau data</h2><div class="table-scroll"><table><thead><tr><th>Baris</th><th>Gaya kerja</th><th>Motivasi</th><th>Kultur kerja</th><th>Nilai kerja</th><th>Status</th></tr></thead><tbody id="rows"></tbody></table></div></div>
+</section>
+</main>
+<footer><div class="wrap">Vinix7 · Proyek akhir Kelompok 5</div></footer>
+</body></html>
