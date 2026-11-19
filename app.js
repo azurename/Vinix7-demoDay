@@ -17,13 +17,20 @@ function showScreen() {
   window.scrollTo(0, 0)
 }
 
-function showSample(target, includeFactors = false) {
-  target.innerHTML = '<p class="eyebrow">CONTOH HASIL</p><h2>Hybrid</h2><p>Kombinasi kerja jarak jauh dan di kantor.</p>' +
-    [['Hybrid', 62], ['Onsite', 23], ['Remote', 15]].map(([label, value]) =>
-      '<div class="prob"><div><span>' + label + '</span><strong>' + value + '%</strong></div><span class="track" aria-hidden="true"><span class="fill" style="width:' + value + '%"></span></span></div>'
-    ).join('') +
-    (includeFactors ? '<p class="note">Contoh faktor: kultur kolaboratif, fleksibilitas, dan pembelajaran.</p>' : '') +
-    '<p class="note">Ilustrasi tampilan. Angka ini belum berasal dari model.</p>'
+function showSample(target, isProfile = false) {
+  const heading = isProfile ? 'HASIL PREDIKSI' : 'PETA PREFERENSI TALENTA'
+  const title = isProfile ? 'Hybrid' : 'Setiap talenta, cara kerja berbeda.'
+  const bars = [['Hybrid', 62], ['Onsite', 23], ['Remote', 15]].map(([label, value]) =>
+    '<div class="prob"><div><span>' + label + '</span><strong>' + value + '%</strong></div><span class="track" aria-hidden="true"><span class="fill" style="width:' + value + '%"></span></span></div>'
+  ).join('')
+  const details = isProfile
+    ? '<h3>Faktor yang paling memengaruhi</h3><ol><li>Kultur kolaboratif</li><li>Fleksibilitas</li><li>Pembelajaran</li></ol>'
+    : ''
+  target.innerHTML =
+    '<div class="result-heading"><p class="eyebrow">' + heading + '</p><span class="sample-label">Contoh hasil</span></div>' +
+    '<h2>' + title + '</h2>' +
+    (isProfile ? '<p>Kombinasi kerja jarak jauh dan di kantor.</p>' : '') +
+    bars + details + '<p class="note">Ilustrasi tampilan hasil model.</p>'
 }
 
 get('fields').innerHTML = options.map(([name, choices], index) => {
@@ -53,6 +60,7 @@ async function handleFile(file) {
   if (!file) return
   const version = ++uploadVersion
   get('preview').hidden = true
+  get('preview-empty').hidden = false
   const status = get('upload-status')
   status.textContent = 'Memeriksa ' + file.name + '…'
   try {
@@ -84,6 +92,7 @@ async function handleFile(file) {
     })
     get('rows').replaceChildren(fragment)
     get('preview').hidden = false
+    get('preview-empty').hidden = true
     status.textContent = valid + ' dari ' + rows.length + ' baris valid.' +
       (rows.length > 50 ? ' Pratinjau menampilkan 50 baris pertama.' : '') +
       ' Prediksi batch belum terhubung ke model.'
@@ -106,5 +115,6 @@ drop.addEventListener('drop', (event) => {
 })
 
 showSample(get('home-result'))
+showSample(get('profile-result'), true)
 showScreen()
 window.addEventListener('hashchange', showScreen)
