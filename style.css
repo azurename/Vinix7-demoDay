@@ -489,16 +489,6 @@ nav a[aria-current] {
   margin-bottom: 24px;
 }
 
-fieldset + fieldset {
-  border-top: 1px solid #edf0f6;
-  padding-top: 12px;
-}
-
-fieldset + fieldset legend {
-  float: left;
-  width: 100%;
-}
-
 #profile > .button {
   width: 100%;
 }
@@ -693,4 +683,3 @@ footer span {
     margin-left: 0;
   }
 }
-
