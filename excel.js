@@ -1,5 +1,5 @@
 ﻿// Read only the first worksheet and shared strings from an OOXML workbook.
-export async function readWorkbook(buffer) {
+async function readWorkbook(buffer) {
   const data = new DataView(buffer)
   const bytes = new Uint8Array(buffer)
   const decoder = new TextDecoder()
@@ -80,4 +80,3 @@ export async function readWorkbook(buffer) {
     return { number: row.getAttribute('r') ?? '', cells }
   }).filter(({ cells }) => cells.some((value) => value.trim()))
 }
-

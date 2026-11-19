@@ -4,7 +4,7 @@ Draft web preferensi lokasi kerja Gen Z. Form individu menampilkan contoh hasil.
 
 ## Jalankan lokal
 
-Gunakan server HTTP statis. Misalnya, dengan Python, jalankan `python -m http.server 8000` dari folder proyek lalu buka http://localhost:8000. Browser perlu mendukung DecompressionStream untuk membaca workbook.
+Buka index.html langsung di browser. Gunakan browser yang mendukung DecompressionStream untuk membaca workbook.
 
 ## Deploy
 

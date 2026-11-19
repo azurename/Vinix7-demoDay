@@ -436,3 +436,140 @@ footer {
   }
 }
 
+
+/* The home page gives the example result and the two input paths equal clarity. */
+:root {
+  font-family: "Aptos", "Segoe UI", system-ui, sans-serif;
+  --navy: #14285b;
+  --blue: #294ec7;
+  --muted: #52627e;
+  --line: #dee5f1;
+}
+
+header {
+  position: relative;
+  z-index: 1;
+}
+
+.nav {
+  min-height: 74px;
+}
+
+nav a {
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+nav a[aria-current] {
+  background: #edf2ff;
+  box-shadow: none;
+}
+
+.hero {
+  background:
+    radial-gradient(ellipse at 94% 12%, #dbe6ff 0%, transparent 47%),
+    linear-gradient(135deg, #fafcff, #edf3fe);
+}
+
+.hero h1 {
+  max-width: 15ch;
+  text-wrap: balance;
+}
+
+.hero h1 span {
+  color: var(--blue);
+}
+
+.hero .intro {
+  max-width: 43ch;
+  font-size: 1.08rem;
+}
+
+.hero .sample {
+  background: radial-gradient(ellipse at 95% 0%, #304da0, transparent 58%), #172d67;
+  border: 1px solid #526baa;
+  box-shadow: 0 24px 48px #182f6429;
+}
+
+.sample .eyebrow {
+  display: inline-block;
+  padding: 4px 9px;
+  border: 1px solid #ffffff46;
+  border-radius: 6px;
+  letter-spacing: .09em;
+}
+
+.prob:first-of-type .fill {
+  background: #b9ccff;
+}
+
+.prob .fill {
+  background: #819fe9;
+}
+
+.modes {
+  align-items: stretch;
+}
+
+.modes a {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 16px;
+  transition: border-color .18s, background .18s;
+}
+
+.modes a:hover {
+  border-color: #a5b7ee;
+  background: #f8faff;
+}
+
+.page-head {
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 24px;
+}
+
+fieldset + fieldset {
+  border-top: 1px solid #edf0f6;
+  padding-top: 12px;
+}
+
+fieldset + fieldset legend {
+  float: left;
+  width: 100%;
+}
+
+#profile > .button {
+  width: 100%;
+}
+
+.drop {
+  min-height: 204px;
+  display: grid;
+  justify-items: center;
+  align-content: center;
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+
+@media (max-width: 480px) {
+  .nav {
+    align-items: start;
+    flex-direction: column;
+    gap: 5px;
+    padding: 12px 0 7px;
+  }
+
+  nav {
+    justify-content: flex-start;
+    gap: 4px;
+  }
+
+  .actions > .button {
+    width: 100%;
+  }
+}
+

@@ -1,6 +1,4 @@
-﻿import { readWorkbook } from './excel.js'
-
-const options = [
+﻿const options = [
   ['Gaya kerja', ['Tim kecil', 'Fleksibel', 'Mandiri', 'Tim besar']],
   ['Motivasi', ['Uang', 'Pengembangan diri', 'Dampak', 'Prestise', 'Kebebasan']],
   ['Kultur kerja', ['Kolaboratif', 'Formal', 'Lincah', 'Berorientasi hasil']],
@@ -110,4 +108,3 @@ drop.addEventListener('drop', (event) => {
 showSample(get('home-result'))
 showScreen()
 window.addEventListener('hashchange', showScreen)
-
