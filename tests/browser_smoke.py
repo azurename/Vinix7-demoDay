@@ -56,7 +56,10 @@ window.addEventListener('DOMContentLoaded', async () => {
   if (!get('upload-status').textContent.startsWith('1 dari 1')) throw Error('valid row total wrong');
   phase('batch-mixed');
   await handleFile(new File([bytes(MIXED)], 'mixed.xlsx'));
-  if (!get('upload-status').textContent.startsWith('1 dari 2') || !get('rows').rows[1].textContent.includes('Periksa')) throw Error('invalid category not isolated to its row');
+  const mixedRows = [...get('rows').rows];
+  if (!mixedRows[1]?.textContent.includes('Periksa')) throw Error('invalid category not isolated to its row');
+  if (!mixedRows[2]?.textContent.includes('Periksa: IPK')) throw Error('Excel boolean accepted as an IPK survey code');
+  if (!get('upload-status').textContent.startsWith('1 dari 3')) throw Error('mixed workbook count wrong');
   phase('batch-duplicate');
   await handleFile(new File([bytes(DUP)], 'duplicate-header.xlsx'));
   if (!get('upload-status').textContent.includes('duplikat') || !get('preview').hidden) throw Error('duplicate header not rejected');
@@ -66,7 +69,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   if (document.documentElement.scrollWidth > window.innerWidth) throw Error('page overflow');
   const external = performance.getEntriesByType('resource').filter(entry => /^(https?:|wss?:)/.test(entry.name));
   if (external.length) throw Error('unexpected external web request during inference');
-  report.textContent = JSON.stringify({features: names.length, prediction, scores, mixed: '1 valid / 2', duplicateHeader: 'rejected', font: fonts[0].family, viewport: innerWidth, externalResources: external.length});
+  report.textContent = JSON.stringify({features: names.length, prediction, scores, mixed: '1 valid / 3', boolean: 'rejected', duplicateHeader: 'rejected', font: fonts[0].family, viewport: innerWidth, externalResources: external.length});
  } catch(e) { report.textContent=JSON.stringify({error:e.message}); }
 });
 </script>'''
@@ -89,6 +92,9 @@ with TemporaryDirectory(prefix='vinix7-test-', dir=os.environ.get('TMPDIR')) as 
     bad = [cell.value for cell in sheet[2]]
     bad[0] = 'kode-sintetis-tidak-valid'
     sheet.append(bad)
+    boolean = [cell.value for cell in sheet[2]]
+    boolean[[cell.value for cell in sheet[1]].index('IPK')] = True
+    sheet.append(boolean)
     mixed = BytesIO()
     wb.save(mixed)
     sheet.cell(1, sheet.max_column + 1, sheet.cell(1,1).value)

@@ -5,7 +5,7 @@ function normalizeCode(value) {
 function featureValues(raw, field) {
   const clean = x => normalizeCode(x).replace(/^[\[\]()"']+|[\[\]()"']+$/g, '').trim()
   const values = field.multi
-    ? [...new Set((Array.isArray(raw) ? raw : String(raw ?? '').split(/[,;|]/)).map(clean).filter(Boolean))]
+    ? [...new Set((Array.isArray(raw) ? raw : normalizeCode(raw).split(/[,;|]/)).map(clean).filter(Boolean))]
     : [normalizeCode(raw)]
   if (!values.length || values.some(v => !field.choices.includes(v))) {
     throw new Error(`${field.label || field.key}: pilih kode yang tersedia.`)

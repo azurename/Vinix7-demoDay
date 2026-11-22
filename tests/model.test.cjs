@@ -23,6 +23,11 @@ test('predicts a weighted class while exposing unweighted scores in order', () =
   assert.deepEqual(out.scores, implementation().predictProfile(model, {'Work Style': 'small', 'Work Values': ['team', 'flex']}).scores);
 });
 
+test('fullwidth separators are equivalent to the canonical multilabel separators', () => {
+  const { predictProfile } = implementation();
+  assert.deepEqual(predictProfile(model, {...row, 'Work Values': 'team；flex｜team'}), predictProfile(model, row));
+});
+
 test('rejects missing, blank and unknown codes instead of scoring a partial profile', () => {
   const predict = raw => implementation().predictProfile(model, raw);
   assert.throws(() => predict({'Work Style': 'small'}), /Work Values/);

@@ -75,8 +75,11 @@ async function readWorkbook(buffer) {
       const column = letters ? [...letters].reduce((sum, letter) => sum * 26 + letter.charCodeAt(0) - 64, 0) - 1 : cells.length
       const raw = elements(cell, 'v')[0]?.textContent ?? ''
       const type = cell.getAttribute('t')
-      cells[column] = type === 's' ? strings[Number(raw)] ?? '' : type === 'inlineStr' ? elements(cell, 't').map((text) => text.textContent).join('') : raw
+      if (type === 'b') cells[column] = raw === '1'
+      else if (type === 's') cells[column] = strings[Number(raw)] ?? ''
+      else if (type === 'inlineStr') cells[column] = elements(cell, 't').map(text => text.textContent).join('')
+      else cells[column] = raw
     }
     return { number: row.getAttribute('r') ?? '', cells }
-  }).filter(({ cells }) => cells.some((value) => value.trim()))
+  }).filter(({ cells }) => cells.some(value => String(value).trim()))
 }
