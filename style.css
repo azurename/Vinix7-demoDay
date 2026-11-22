@@ -1,5 +1,13 @@
-﻿:root {
-  font:16px/1.55 "Segoe UI",system-ui,sans-serif;
+﻿@font-face {
+  font-family:Inter;
+  src:url("fonts/InterVariable.woff2") format("woff2");
+  font-weight:100 900;
+  font-style:normal;
+  font-display:swap;
+}
+
+:root {
+  font:16px/1.55 Inter,"Segoe UI",system-ui,sans-serif;
   color:#142651;
   background:#f3f6fc;
   --navy:#102b6e;
@@ -10,6 +18,12 @@
 
 * {
   box-sizing:border-box;
+}
+
+.field-hint {
+  color:var(--muted);
+  font-size:.875rem;
+  margin:0 0 .5rem;
 }
 
 body {
@@ -414,9 +428,8 @@ footer {
 }
 
 
-/* The home page gives the example result and the two input paths equal clarity. */
+/* Additional home-page and form styling. */
 :root {
-  font-family: "Aptos", "Segoe UI", system-ui, sans-serif;
   --navy: #14285b;
   --blue: #294ec7;
   --muted: #52627e;

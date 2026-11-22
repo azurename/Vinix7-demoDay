@@ -1,0 +1,14 @@
+*.xlsx
+!templat-vinix7.xlsx
+*.ipynb
+*.zip
+*.pkl
+*.joblib
+*.csv
+*.parquet
+.env*
+.venv/
+.vercel/
+__pycache__/
+.superpowers/
+dist/

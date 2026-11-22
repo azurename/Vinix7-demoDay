@@ -7,6 +7,8 @@
   <title>VINIX7 · Talent Mobility Navigator</title>
   <link rel="stylesheet" href="style.css">
   <script src="excel.js" defer></script>
+  <script src="model-data.js" defer></script>
+  <script src="model.js" defer></script>
   <script src="app.js" defer></script>
 </head>
 <body>
@@ -33,21 +35,26 @@
               <a class="button secondary" href="#excel">Unggah Banyak Data (Excel)</a>
             </div>
           </div>
-          <div class="sample" id="home-result"></div>
+          <div class="sample" id="home-result">
+            <p class="eyebrow">TIGA PREFERENSI LOKASI</p>
+            <h2>Hybrid, Onsite, atau Remote</h2>
+            <p>Gunakan 16 fitur profil untuk mencoba model demo.</p>
+            <p class="note">Jawaban “Any” tidak termasuk dalam model tiga kelas ini.</p>
+          </div>
         </div>
       </div>
       <div class="wrap">
         <dl class="research">
           <div><dt>Basis riset mahasiswa Gen Z</dt><dd>2.988 respons</dd></div>
           <div><dt>Kelas preferensi</dt><dd>Hybrid / Onsite / Remote</dd></div>
-          <div><dt>Dimensi profil</dt><dd>Gaya, nilai, motivasi, kultur</dd></div>
+          <div><dt>Fitur input model</dt><dd>16 fitur profil</dd></div>
         </dl>
         <section class="workflow" aria-labelledby="workflow-title">
           <h2 id="workflow-title">Dari profil ke keputusan.</h2>
           <ol>
             <li><strong>Masukkan profil</strong><p>Isi formulir satu responden atau unggah data Excel.</p></li>
-            <li><strong>Pahami preferensi</strong><p>Lihat probabilitas tiap kelas dan faktor yang berpengaruh.</p></li>
-            <li><strong>Rancang strategi HR</strong><p>Gunakan wawasan sebagai bahan diskusi.</p></li>
+            <li><strong>Pahami preferensi</strong><p>Lihat skor tiap kelas dan prediksi akhir dari model demo.</p></li>
+            <li><strong>Diskusikan hasil</strong><p>Gunakan hasil sebagai bahan eksplorasi, bukan seleksi kerja.</p></li>
           </ol>
         </section>
       </div>
@@ -66,24 +73,20 @@
       <div class="columns">
         <form id="profile" class="panel">
           <h2>Profil responden</h2>
-          <p class="section-description">Isi profil untuk melihat contoh hasil prediksi.</p>
+          <p class="section-description">Semua 16 fitur wajib. Pilihan angka mengikuti kode pada kuesioner; misalnya kode IPK bukan nilai IPK langsung.</p>
           <div id="fields"></div>
-          <details>
-            <summary>Profil tambahan (opsional)</summary>
-            <div class="optional">
-              <label>Ukuran perusahaan<input name="company_size"></label>
-              <label>Gaya kognitif<input name="cognitive_style"></label>
-            </div>
-          </details>
           <p id="form-message" class="error" role="alert"></p>
-          <button class="button" type="submit">Tampilkan contoh hasil</button>
-          <p class="note">Gunakan profil anonim.</p>
+          <button class="button" type="submit" id="profile-submit">Jalankan prediksi</button>
+          <p class="note">Gunakan profil anonim. Pengisian dan prediksi diproses di browser.</p>
         </form>
         <div>
-          <div class="panel result-panel" id="profile-result" aria-live="polite"></div>
+          <div class="panel result-panel" id="profile-result" aria-live="polite">
+            <p class="eyebrow">HASIL PREDIKSI</p><h2>Belum ada hasil</h2>
+            <p>Isi 16 fitur di formulir untuk melihat hasilnya.</p>
+          </div>
           <aside class="usage">
             <h2>Catatan penggunaan</h2>
-            <p>Gunakan hasil sebagai bahan pertimbangan. Probabilitas menunjukkan kecenderungan preferensi lokasi kerja.</p>
+            <p>Model demo ini memperkirakan preferensi lokasi kerja sesuai data survei. Jangan gunakan hasil untuk menyaring atau menilai kandidat.</p>
           </aside>
         </div>
       </div>
@@ -93,7 +96,7 @@
       <div class="page-head">
         <p class="eyebrow">PREDIKSI BANYAK RESPONDEN</p>
         <h1>Satu unggahan, banyak wawasan.</h1>
-        <p>Unggah data Excel untuk memeriksa profil beberapa responden sekaligus.</p>
+        <p>Baca dan prediksi profil beberapa responden sekaligus. File tetap di browser.</p>
       </div>
       <div class="mode-switch" aria-label="Mode prediksi">
         <a href="#individu">Satu Responden</a>
@@ -115,18 +118,18 @@
           <ol>
             <li>Unduh templat Excel.</li>
             <li>Isi satu responden pada setiap baris.</li>
-            <li>Pisahkan beberapa nilai kerja dengan koma.</li>
+            <li>Pisahkan beberapa kode bidang minat dan nilai kerja dengan koma.</li>
           </ol>
           <a href="templat-vinix7.xlsx" download class="button secondary">Unduh Templat Excel</a>
-          <p class="note">Kolom wajib: gaya kerja, motivasi, kultur kerja, dan nilai kerja.</p>
+          <p class="note">Gunakan semua 16 kolom di lembar pertama dan kode di lembar panduan.</p>
         </aside>
       </div>
       <section class="panel preview" aria-labelledby="preview-title">
         <h2 id="preview-title">Pratinjau data</h2>
-        <p id="preview-empty" class="section-description">Pilih file Excel untuk melihat status validasi setiap baris.</p>
+        <p id="preview-empty" class="section-description">Pilih file Excel untuk melihat prediksi dan kesalahan input per baris.</p>
         <div class="table-scroll" id="preview" hidden>
           <table>
-            <thead><tr><th scope="col">Baris</th><th scope="col">Gaya kerja</th><th scope="col">Motivasi</th><th scope="col">Kultur kerja</th><th scope="col">Nilai kerja</th><th scope="col">Status</th></tr></thead>
+            <thead><tr><th scope="col">Baris</th><th scope="col">Prediksi</th><th scope="col">Hybrid</th><th scope="col">Onsite</th><th scope="col">Remote</th><th scope="col">Status</th></tr></thead>
             <tbody id="rows"></tbody>
           </table>
         </div>
