@@ -41,3 +41,52 @@ test('finds canonical headers out of order, ignores extra headers and rejects am
   assert.throws(() => find(['Work Style', 'WORK STYLE', 'Work Values']), /duplikat.*Work Style/i);
   assert.throws(() => find(['Work Style']), /kurang.*Work Values/i);
 });
+
+test('recommends a non-Hybrid alternative below 80% and retains Hybrid at 80%', () => {
+  const { recommendProfile } = implementation();
+  const profile = { 'Work Style': 'small', 'Work Values': ['team'] };
+  const below = recommendProfile(model, profile, { label: 'hybrid', scores: [.7999, .105, .0951] });
+  assert.equal(below.label, 'remote'); // The existing Remote decision weight breaks this comparison.
+  assert.equal(below.comparedWith, 'onsite');
+  assert.equal(below.isAlternative, true);
+
+  const at = recommendProfile(model, profile, { label: 'hybrid', scores: [.8, .11, .09] });
+  assert.equal(at.label, 'hybrid');
+  assert.equal(at.comparedWith, 'remote');
+  assert.equal(at.isAlternative, false);
+});
+
+test('compares an Onsite result with Remote instead of promoting a lower-scoring Hybrid', () => {
+  const { recommendProfile } = implementation();
+  const result = recommendProfile(model, row, { label: 'onsite', scores: [.36, .41, .23] });
+  assert.equal(result.label, 'onsite');
+  assert.equal(result.comparedWith, 'remote');
+  assert.equal(result.isAlternative, false);
+});
+
+test('returns the strongest supporting selected answers from distinct questions', () => {
+  const { predictProfile, recommendProfile } = implementation();
+  const fixture = {
+    ...model,
+    features: [
+      { key: 'Values', multi: true, choices: ['team', 'stability', 'unused'] },
+      { key: 'Culture', choices: ['formal'] },
+      { key: 'Style', choices: ['flex'] },
+      { key: 'Interest', choices: ['tech'] },
+    ],
+    terms: {
+      'Values::team': [0, .8, 0], 'Values::stability': [0, .6, 0], 'Values::unused': [0, 9, 0],
+      'Culture=formal': [0, .5, 0], 'Style=flex': [0, -.4, 0], 'Interest=tech': [0, .02, 0],
+    },
+  };
+  const input = { Values: ['team', 'stability'], Culture: 'formal', Style: 'flex', Interest: 'tech' };
+  const result = recommendProfile(fixture, input, predictProfile(fixture, input));
+  assert.deepEqual(result.reasons, [{ key: 'Values', value: 'team' }, { key: 'Culture', value: 'formal' }]);
+});
+
+test('does not present tiny or opposing contributions as reasons', () => {
+  const { recommendProfile } = implementation();
+  const fixture = { ...model, terms: { ...model.terms, 'Work Style=small': [0, .01, 0] } };
+  const result = recommendProfile(fixture, row, { label: 'onsite', scores: [.2, .6, .2] });
+  assert.deepEqual(result.reasons, []);
+});

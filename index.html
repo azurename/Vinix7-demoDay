@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Eksplorasi preferensi lokasi kerja mahasiswa Gen Z.">
+  <meta name="description" content="Kenali pilihan sistem kerja sebelum melamar dan diskusikan kecocokannya dengan kebutuhan perusahaan.">
   <title>VINIX7 · Talent Mobility Navigator</title>
   <link rel="stylesheet" href="style.css">
   <script src="excel.js" defer></script>
@@ -17,7 +17,7 @@
       <a class="brand" href="#beranda" aria-label="VINIX 7">VINIX <span class="brand-seven">7</span></a>
       <nav aria-label="Navigasi utama">
         <a href="#beranda">Beranda</a>
-        <a href="#individu">Prediksi</a>
+        <a href="#individu">Isi Formulir</a>
         <a href="#excel">Unggah Excel</a>
       </nav>
     </div>
@@ -27,34 +27,37 @@
       <div class="hero">
         <div class="wrap hero-grid">
           <div>
-            <p class="eyebrow">RISET GEN Z / UNTUK TIM HR</p>
-            <h1>Kenali cara kerja <span>pilihan talenta Gen Z.</span></h1>
-            <p class="intro">Analisis preferensi Remote, Hybrid, dan Onsite berdasarkan gaya kerja, nilai kerja, motivasi, dan kultur kerja mahasiswa Gen Z.</p>
+            <p class="eyebrow">UNTUK PENCARI KERJA DAN PERUSAHAAN</p>
+            <h1>Temukan <span>sistem kerja yang cocok.</span></h1>
+            <p class="intro">Kenali cara kerja yang kamu inginkan sebelum melamar. Bagi perusahaan, hasilnya bisa jadi awal percakapan untuk mencocokkan preferensi kandidat dengan kebutuhan tim.</p>
             <div class="actions">
-              <a class="button" href="#individu">Prediksi Satu Responden</a>
-              <a class="button secondary" href="#excel">Unggah Banyak Data (Excel)</a>
+              <a class="button" href="#individu">Cek Preferensi Kerja</a>
+              <a class="button secondary" href="#excel">Unggah Profil via Excel</a>
             </div>
           </div>
           <div class="sample" id="home-result">
-            <p class="eyebrow">TIGA PREFERENSI LOKASI</p>
-            <h2>Hybrid, Onsite, atau Remote</h2>
-            <p>Gunakan 16 fitur profil untuk mencoba model demo.</p>
-            <p class="note">Jawaban “Any” tidak termasuk dalam model tiga kelas ini.</p>
+            <p class="eyebrow">PILIHAN SISTEM KERJA</p>
+            <h2>Tiga cara untuk bekerja</h2>
+            <dl class="work-options">
+              <div><dt>Onsite</dt><dd>Bekerja langsung di kantor atau lokasi kerja.</dd></div>
+              <div><dt>Remote</dt><dd>Bekerja jarak jauh tanpa perlu datang rutin ke kantor.</dd></div>
+              <div><dt>Hybrid</dt><dd>Membagi waktu antara hadir di kantor dan bekerja jarak jauh.</dd></div>
+            </dl>
           </div>
         </div>
       </div>
       <div class="wrap">
         <dl class="research">
-          <div><dt>Basis riset mahasiswa Gen Z</dt><dd>2.988 respons</dd></div>
-          <div><dt>Kelas preferensi</dt><dd>Hybrid / Onsite / Remote</dd></div>
-          <div><dt>Fitur input model</dt><dd>16 fitur profil</dd></div>
+          <div><dt>Untuk pencari kerja</dt><dd>Kenali preferensimu</dd><dd class="card-explainer">Pertimbangkan sistem kerja saat memilih lowongan, bukan hanya posisi dan gajinya.</dd></div>
+          <div><dt>Untuk perusahaan</dt><dd>Pahami preferensi kandidat</dd><dd class="card-explainer">Bandingkan dengan kebutuhan tim sebelum penempatan agar ekspektasi kerja tidak berbeda.</dd></div>
+          <div><dt>Tujuan bersama</dt><dd>Sepakati cara kerja</dd><dd class="card-explainer">Bicarakan jadwal masuk kantor dan cara berkolaborasi sebelum mengambil keputusan.</dd></div>
         </dl>
         <section class="workflow" aria-labelledby="workflow-title">
-          <h2 id="workflow-title">Dari profil ke keputusan.</h2>
+          <h2 id="workflow-title">Cara menggunakan VINIX7</h2>
           <ol>
-            <li><strong>Masukkan profil</strong><p>Isi formulir satu responden atau unggah data Excel.</p></li>
-            <li><strong>Pahami preferensi</strong><p>Lihat skor tiap kelas dan prediksi akhir dari model demo.</p></li>
-            <li><strong>Diskusikan hasil</strong><p>Gunakan hasil sebagai bahan eksplorasi, bukan seleksi kerja.</p></li>
+            <li><strong>Ceritakan cara kerjamu</strong><p>Isi formulir sesuai pengalaman dan hal yang kamu cari dalam pekerjaan.</p></li>
+            <li><strong>Lihat saran dan alasannya</strong><p>Bandingkan cara kerja dan lihat jawaban apa yang paling mendukung saran itu.</p></li>
+            <li><strong>Jadikan bahan diskusi</strong><p>Pencari kerja bisa menyiapkan pertanyaan sebelum melamar. Perusahaan bisa mendiskusikan penempatan, bukan menjadikan hasil ini sebagai dasar seleksi.</p></li>
           </ol>
         </section>
       </div>
@@ -62,32 +65,25 @@
 
     <section id="individu" class="screen wrap" hidden>
       <div class="page-head">
-        <p class="eyebrow">PREFERENSI LOKASI KERJA</p>
-        <h1>Prediksi preferensi talenta</h1>
-        <p>Kenali kecenderungan cara kerja dari profil responden.</p>
+        <p class="eyebrow">PREFERENSI KERJA</p>
+        <h1>Cara kerja apa yang cocok untukmu?</h1>
+        <p>Jawab beberapa pertanyaan tentang rencana dan kebiasaanmu untuk mendapat saran sebelum melamar.</p>
       </div>
       <div class="mode-switch" aria-label="Mode prediksi">
-        <a href="#individu" aria-current="page">Satu Responden</a>
+        <a href="#individu" aria-current="page">Isi Formulir</a>
         <a href="#excel">Banyak Data (Excel)</a>
       </div>
       <div class="columns">
         <form id="profile" class="panel">
-          <h2>Profil responden</h2>
-          <p class="section-description">Semua 16 fitur wajib. Pilihan angka mengikuti kode pada kuesioner; misalnya kode IPK bukan nilai IPK langsung.</p>
+          <h2>Ceritakan tentang dirimu</h2>
+          <p class="section-description">Jawab semua pertanyaan sesuai keadaan dan pilihanmu. Kamu tidak perlu memasukkan nama.</p>
           <div id="fields"></div>
           <p id="form-message" class="error" role="alert"></p>
-          <button class="button" type="submit" id="profile-submit">Jalankan prediksi</button>
-          <p class="note">Gunakan profil anonim. Pengisian dan prediksi diproses di browser.</p>
+          <button class="button" type="submit" id="profile-submit">Lihat Saran Sistem Kerja</button>
         </form>
-        <div>
-          <div class="panel result-panel" id="profile-result">
-            <p class="eyebrow">HASIL PREDIKSI</p><h2>Belum ada hasil</h2>
-            <p>Isi 16 fitur di formulir untuk melihat hasilnya.</p>
-          </div>
-          <aside class="usage">
-            <h2>Catatan penggunaan</h2>
-            <p>Model demo ini memperkirakan preferensi lokasi kerja sesuai data survei. Jangan gunakan hasil untuk menyaring atau menilai kandidat.</p>
-          </aside>
+        <div class="panel result-panel" id="profile-result">
+          <p class="eyebrow">SARAN SISTEM KERJA</p><h2>Belum ada saran</h2>
+          <p>Isi formulir untuk melihat saran dan alasan di baliknya.</p>
         </div>
       </div>
     </section>
@@ -99,7 +95,7 @@
         <p>Baca dan prediksi profil beberapa responden sekaligus. File tetap di browser.</p>
       </div>
       <div class="mode-switch" aria-label="Mode prediksi">
-        <a href="#individu">Satu Responden</a>
+        <a href="#individu">Isi Formulir</a>
         <a href="#excel" aria-current="page">Banyak Data (Excel)</a>
       </div>
       <div class="columns">

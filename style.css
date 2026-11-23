@@ -217,11 +217,6 @@ h2 {
   border-radius:inherit;
 }
 
-.sample .note {
-  margin-top:20px;
-  font-size:.87rem;
-}
-
 .page-head {
   padding:42px 0 25px;
 }
@@ -483,12 +478,19 @@ nav a[aria-current] {
   letter-spacing: .09em;
 }
 
-.prob:first-of-type .fill {
-  background: #b9ccff;
+.work-options {
+  display: grid;
+  gap: 14px;
+  margin: 18px 0 0;
 }
 
-.prob .fill {
-  background: #819fe9;
+.work-options dt {
+  font-weight: 750;
+}
+
+.work-options dd {
+  margin: 2px 0 0;
+  color: #d4dfff;
 }
 
 .page-head {
@@ -561,6 +563,13 @@ nav a[aria-current] {
   font-weight: 750;
 }
 
+.research .card-explainer {
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 1rem;
+  font-weight: 400;
+}
+
 .workflow {
   padding: 40px 0;
 }
@@ -608,23 +617,6 @@ nav a[aria-current] {
   margin: -10px 0 18px;
 }
 
-.result-heading {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.result-heading .eyebrow {
-  margin: 0 0 10px;
-}
-
-.sample-label {
-  font-size: .8rem;
-  font-weight: 700;
-}
-
 .result-panel {
   scroll-margin-top: 16px;
 }
@@ -653,26 +645,24 @@ nav a[aria-current] {
 
 .result-panel h3 {
   font-size: 1rem;
-  margin: 21px 0 0;
+  margin: 20px 0 4px;
 }
 
-.result-panel ol {
+.result-panel ul {
   padding-left: 21px;
-  margin: 8px 0 0;
+  margin: 6px 0 0;
   color: var(--muted);
 }
 
-.usage {
-  margin-top: 14px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: #eaf1ff;
-  padding: 16px;
+.score-details {
+  border-top: 1px solid var(--line);
+  margin: 20px 0 0;
+  padding-top: 12px;
 }
 
-.usage h2 {
-  font-size: 1rem;
-  margin-bottom: 4px;
+.score-details summary {
+  margin: 0;
+  color: var(--blue);
 }
 
 footer .wrap {

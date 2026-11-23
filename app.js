@@ -2,6 +2,35 @@
 const get = id => document.getElementById(id)
 const titles = { hybrid: 'Hybrid', onsite: 'Onsite', remote: 'Remote' }
 const formatScore = value => (value * 100).toLocaleString('id-ID', { maximumFractionDigits: 1 }) + '%'
+const workSettings = {
+  onsite: { phrase: 'bekerja langsung di lokasi', next: 'tanyakan lokasi kerja dan jadwal masuk, lalu pertimbangkan waktu tempuhmu.' },
+  remote: { phrase: 'bekerja jarak jauh', next: 'tanyakan jam kerja, kapan kamu perlu siap dihubungi, dan bagaimana tim berkomunikasi.' },
+  hybrid: { phrase: 'membagi waktu antara kantor dan kerja jarak jauh', next: 'tanyakan berapa hari kamu perlu ke kantor dan apakah harinya bisa dipilih.' },
+}
+const questions = {
+  'Jalur Karir': 'Apa rencana kariermu?',
+  'Bidang Minat': 'Bidang apa yang kamu minati?',
+  'Work Values': 'Apa yang penting bagimu dalam pekerjaan?',
+  'Work Style': 'Bagaimana kamu lebih nyaman bekerja?',
+  'Cognitive Style': 'Bagaimana kamu biasa menghadapi masalah?',
+  'Motivasi': 'Apa yang paling memotivasimu saat bekerja?',
+  'Ukuran Perusahaan': 'Perusahaan seperti apa yang kamu incar?',
+  'Kultur Kerja': 'Suasana kerja seperti apa yang kamu sukai?',
+  'Semester': 'Saat ini kamu semester berapa atau sudah lulus?',
+  'IPK': 'Berapa kisaran IPK terakhirmu?',
+  'Ekspektasi Gaji': 'Berapa kisaran gaji yang kamu harapkan?',
+  'Minat Wirausaha': 'Seberapa tertarik kamu membuka usaha sendiri?',
+  'Rencana S2/Sertifikasi': 'Adakah rencana mengambil S2 atau sertifikasi?',
+  'Frekuensi Belajar': 'Seberapa sering kamu belajar hal baru?',
+  'Kesiapan Interview': 'Seberapa siap kamu menghadapi wawancara kerja?',
+  'Level Bahasa Inggris': 'Sejauh mana kemampuan bahasa Inggrismu?',
+}
+const plainLabels = {
+  'Cognitive Style': 'Cara menghadapi masalah',
+  'Kultur Kerja': 'Suasana kerja',
+  'Kesiapan Interview': 'Kesiapan wawancara kerja',
+  'Level Bahasa Inggris': 'Kemampuan bahasa Inggris',
+}
 
 function showScreen() {
   const hash = location.hash.slice(1)
@@ -21,14 +50,35 @@ function element(tag, text, className) {
   return node
 }
 
-function showResult(result) {
+function showResult(result, { label, comparedWith, isAlternative, reasons }) {
   const target = get('profile-result')
-  const heading = element('div', null, 'result-heading')
-  heading.append(element('p', 'HASIL PREDIKSI', 'eyebrow'), element('span', 'Model demo', 'sample-label'))
-  const title = element('h2', titles[result.label])
+  const preferred = workSettings[label]
+  const comparison = workSettings[comparedWith]
+  const title = element('h2', isAlternative ? `Alternatif: ${titles[label]}` : `Pertimbangkan kerja ${titles[label]}`)
   title.tabIndex = -1
-  title.setAttribute('aria-label', `Hasil prediksi: ${titles[result.label]}`)
-  target.replaceChildren(heading, title)
+  const intro = isAlternative
+    ? `Kalau sedang memilih antara Onsite dan Remote, jawabanmu lebih mendukung pilihan untuk ${preferred.phrase} dibanding ${comparison.phrase}.`
+    : `Dari jawabanmu, kamu cenderung lebih cocok ${preferred.phrase} dibanding ${comparison.phrase}.`
+  target.replaceChildren(element('p', 'SARAN SISTEM KERJA', 'eyebrow'), title, element('p', intro))
+
+  target.append(element('h3', 'Kenapa saran ini muncul?'))
+  if (reasons.length) {
+    target.append(element('p', 'Saran ini muncul antara lain karena kamu memilih:'))
+    const list = element('ul')
+    for (const { key, value } of reasons) {
+      const field = model.features.find(item => item.key === key)
+      const item = element('li')
+      item.append(element('strong', `${plainLabels[key] || field.label}: `), field.choiceLabels[value])
+      list.append(item)
+    }
+    target.append(list)
+  } else {
+    target.append(element('p', 'Saran ini berasal dari gabungan jawabanmu. Tidak ada satu jawaban yang cukup menonjol untuk dijadikan alasan utama.'))
+  }
+
+  target.append(element('h3', 'Sebelum melamar'), element('p', `Saat melihat lowongan ${titles[label]}, ${preferred.next}`))
+  const details = element('details', null, 'score-details')
+  details.append(element('summary', 'Lihat skor tiap sistem kerja'))
   model.classes.forEach((key, i) => {
     const prob = element('div', null, 'prob')
     const summary = element('div')
@@ -39,9 +89,10 @@ function showResult(result) {
     track.append(fill)
     summary.append(element('span', titles[key]), element('strong', formatScore(result.scores[i])))
     prob.append(summary, track)
-    target.append(prob)
+    details.append(prob)
   })
-  target.append(element('p', 'Batang menunjukkan skor model. Prediksi akhir menggunakan pengali kelas, jadi hasil bisa berbeda dari batang terbesar.', 'note'))
+  details.append(element('p', 'Skor ini menunjukkan kecenderungan dari jawabanmu, bukan peluang diterima kerja.', 'note'))
+  target.append(details)
   title.focus({ preventScroll: true })
   target.scrollIntoView({ block: 'start', behavior: 'instant' })
 }
@@ -49,7 +100,9 @@ function showResult(result) {
 function renderFields(features) {
   for (const [i, field] of features.entries()) {
     const fieldset = element('fieldset')
-    fieldset.append(element('legend', field.label))
+    const legend = element('legend', questions[field.key] || field.label)
+    legend.id = `feature-label-${i}`
+    fieldset.append(legend)
     if (field.multi) {
       const hint = element('p', field.max ? `Pilih 1 sampai ${field.max} opsi.` : 'Pilih minimal satu opsi.', 'field-hint')
       hint.id = `feature-hint-${i}`
@@ -78,8 +131,8 @@ function renderFields(features) {
       const select = element('select')
       select.name = field.key
       select.required = true
-      select.setAttribute('aria-label', field.label)
-      select.add(new Option('Pilih ' + field.label, ''))
+      select.setAttribute('aria-labelledby', legend.id)
+      select.add(new Option('Pilih jawaban', ''))
       for (const code of field.choices) select.add(new Option(field.choiceLabels[code], code))
       fieldset.append(select)
     }
@@ -88,15 +141,15 @@ function renderFields(features) {
 }
 
 const initialResult = () => get('profile-result').replaceChildren(
-  element('p', 'HASIL PREDIKSI', 'eyebrow'),
-  element('h2', 'Belum ada hasil'),
-  element('p', 'Isi 16 fitur di formulir untuk melihat hasilnya.'),
+  element('p', 'SARAN SISTEM KERJA', 'eyebrow'),
+  element('h2', 'Belum ada saran'),
+  element('p', 'Isi formulir untuk melihat saran dan alasan di baliknya.'),
 )
 
 if (model) renderFields(model.features)
 else {
   get('profile-submit').disabled = true
-  get('form-message').textContent = 'Model belum dapat dimuat. Coba muat ulang halaman.'
+  get('form-message').textContent = 'Saran belum bisa ditampilkan. Coba muat ulang halaman.'
 }
 const profile = get('profile')
 profile.addEventListener('change', () => {
@@ -110,11 +163,14 @@ profile.addEventListener('submit', event => {
   const data = new FormData(profile)
   const values = Object.fromEntries(model.features.map(field => [field.key, field.multi ? data.getAll(field.key) : data.get(field.key)]))
   try {
-    showResult(predictProfile(model, values))
+    const result = predictProfile(model, values)
+    showResult(result, recommendProfile(model, values, result))
   } catch (error) {
     initialResult()
-    get('form-message').textContent = error.message
     const missing = model.features.find(field => field.multi && values[field.key].length === 0)
+    get('form-message').textContent = missing
+      ? `Pilih setidaknya satu jawaban untuk pertanyaan “${questions[missing.key] || missing.label}”`
+      : 'Saran belum bisa ditampilkan. Coba periksa jawaban atau muat ulang halaman.'
     if (missing) {
       const control = profile.elements.namedItem(missing.key)[0]
       control.setAttribute('aria-invalid', 'true')

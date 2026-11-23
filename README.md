@@ -1,6 +1,8 @@
 ﻿# Vinix7
 
-Demo preferensi lokasi kerja Gen Z. Form individu dan Excel memakai skema dan model Logistic Regression tiga kelas yang sama. Pilihan `Any` tidak dimodelkan. Skor bukan dasar seleksi kerja. File Excel diproses di browser, tidak dikirim ke server.
+Panduan preferensi sistem kerja berbasis survei Gen Z. Form individu dan Excel memakai skema dan model Logistic Regression tiga kelas yang sama. Pilihan `Any` tidak dimodelkan. Skor bukan dasar seleksi kerja. File Excel diproses di browser, tidak dikirim ke server.
+
+Form individu tidak menonjolkan Hybrid jika skor modelnya di bawah 80%. Jika hasil modelnya Hybrid di bawah batas itu, form menawarkan Onsite atau Remote sebagai alternatif, tanpa mengubah skor asli atau hasil Excel. Alasan di form berasal dari pilihan yang paling mendukung saran relatif terhadap opsi pembanding, bukan kesimpulan sebab-akibat atau uji signifikansi statistik.
 
 ## Jalankan lokal
 
