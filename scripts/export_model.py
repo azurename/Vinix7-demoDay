@@ -23,24 +23,33 @@ ROOT = Path(__file__).resolve().parents[1]
 CLASSES = ['hybrid', 'onsite', 'remote']
 DECISION = [1., 1., 1.3]  # Notebook saved output, section 17.1 for Single.
 
-def field(key, label, options, multi=False):
+def field(key, label, options, multi=False, max_options=None):
     labels = dict(part.split(':', 1) for part in options.split('|'))
-    return {'key': key, 'label': label, 'multi': multi, 'choices': list(labels), 'choiceLabels': labels}
+    data = {'key': key, 'label': label, 'multi': multi, 'choices': list(labels), 'choiceLabels': labels}
+    if max_options is not None:
+        data['max'] = max_options
+    return data
 
-def coded(key, top):
-    return field(key, key, '|'.join(f'{n}:Kode {n}' for n in range(1, top + 1)))
+def coded(key, labels):
+    return field(key, key, '|'.join(f'{n}:{text}' for n, text in enumerate(labels, start=1)))
 
 FEATURES = [
     field('Jalur Karir', 'Jalur karier', 'stay:Tetap di jalur saat ini|expand:Perluas jalur|switch:Pindah jalur|unsure:Belum yakin'),
-    field('Bidang Minat', 'Bidang minat', 'biz:Bisnis|creative:Kreatif|ecom:E-commerce|edu:Pendidikan|finance:Keuangan|govt:Pemerintahan|health:Kesehatan|industry:Industri|social:Sosial|tech:Teknologi', True),
-    field('Work Values', 'Nilai kerja', 'creative:Kreativitas|flex:Fleksibilitas|growth:Pertumbuhan|impact:Dampak|learning:Pembelajaran|prestige:Prestise|salary:Gaji|stability:Stabilitas|team:Tim|wlb:Keseimbangan kerja dan hidup', True),
+    field('Bidang Minat', 'Bidang minat', 'biz:Bisnis|creative:Kreatif|ecom:E-commerce|edu:Pendidikan|finance:Keuangan|govt:Pemerintahan|health:Kesehatan|industry:Industri|social:Sosial|tech:Teknologi', True, 3),
+    field('Work Values', 'Nilai kerja', 'creative:Kreativitas|flex:Fleksibilitas|growth:Pertumbuhan|impact:Dampak|learning:Pembelajaran|prestige:Prestise|salary:Gaji|stability:Stabilitas|team:Tim|wlb:Keseimbangan kerja dan hidup', True, 3),
     field('Work Style', 'Gaya kerja', 'big:Tim besar|flex:Fleksibel|small:Tim kecil|solo:Mandiri'),
     field('Cognitive Style', 'Gaya kognitif', 'analytical:Analitis|creative:Kreatif|social:Sosial|strategic:Strategis'),
     field('Motivasi', 'Motivasi', 'freedom:Kebebasan|growth:Pengembangan diri|impact:Dampak|money:Uang|prestige:Prestise'),
     field('Ukuran Perusahaan', 'Ukuran perusahaan', 'big:Besar|flex:Fleksibel|mid:Menengah|startup:Startup'),
     field('Kultur Kerja', 'Kultur kerja', 'agile:Lincah|collab:Kolaboratif|formal:Formal|result:Berorientasi hasil'),
-    coded('Semester', 5), coded('IPK', 4), coded('Ekspektasi Gaji', 5), coded('Minat Wirausaha', 5),
-    coded('Rencana S2/Sertifikasi', 4), coded('Frekuensi Belajar', 4), coded('Kesiapan Interview', 5), coded('Level Bahasa Inggris', 4),
+    coded('Semester', ['Semester 1-2', 'Semester 3-4', 'Semester 5-6', 'Semester 7-8', 'Sudah Lulus']),
+    coded('IPK', ['Di bawah 2.50', '2.50-2.99', '3.00-3.49', '3.50-4.00']),
+    coded('Ekspektasi Gaji', ['< Rp5 juta', 'Rp5-7 juta', 'Rp7-10 juta', 'Rp10-15 juta', '> Rp15 juta']),
+    coded('Minat Wirausaha', ['Sangat tidak tertarik', 'Tidak tertarik', 'Netral', 'Tertarik', 'Sangat tertarik']),
+    coded('Rencana S2/Sertifikasi', ['Tidak berencana', 'Hanya sertifikasi', 'Hanya S2', 'S2 dan sertifikasi']),
+    coded('Frekuensi Belajar', ['Jarang / tidak pernah', '1-2 kali per minggu', '3-4 kali per minggu', 'Hampir setiap hari']),
+    coded('Kesiapan Interview', ['Sangat belum siap', 'Belum siap', 'Cukup siap', 'Siap', 'Sangat siap']),
+    coded('Level Bahasa Inggris', ['Dasar', 'Menengah', 'Mahir', 'Sangat mahir']),
 ]
 
 
@@ -62,6 +71,8 @@ def records(row):
             values = [value]
         if not values or any(v not in item['choices'] for v in values):
             raise ValueError(f'Invalid or missing input code: {key}')
+        if item.get('max') and len(values) > item['max']:
+            raise ValueError(f'Too many selections: {key}')
         features.update({key + ('::' if item['multi'] else '=') + v: 1. for v in values})
     return features
 
@@ -95,7 +106,7 @@ def synthetic_profiles():
     rng = random.Random(42)
     profiles = []
     for _ in range(128):
-        profiles.append({f['key']: ', '.join(rng.sample(f['choices'], rng.randint(1, 4))) if f['multi'] else rng.choice(f['choices']) for f in FEATURES})
+        profiles.append({f['key']: ', '.join(rng.sample(f['choices'], rng.randint(1, min(4, f.get('max', 4))))) if f['multi'] else rng.choice(f['choices']) for f in FEATURES})
     return profiles
 
 

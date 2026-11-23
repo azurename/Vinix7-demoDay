@@ -60,22 +60,16 @@ header {
 }
 
 .brand {
-  display:flex;
-  align-items:center;
-  gap:10px;
   text-decoration:none;
+  color:var(--navy);
   font-weight:800;
-  font-size:1.28rem;
+  font-size:1.45rem;
+  letter-spacing:.02em;
+  text-transform:uppercase;
 }
 
-.mark {
-  display:grid;
-  place-items:center;
-  background:var(--navy);
-  color:white;
-  width:33px;
-  height:33px;
-  border-radius:8px;
+.brand-seven {
+  color:#b8860b;
 }
 
 nav {
@@ -536,14 +530,6 @@ nav a[aria-current] {
   }
 }
 
-.brand small {
-  display: block;
-  color: var(--muted);
-  font-size: .74rem;
-  font-weight: 600;
-  letter-spacing: 0;
-}
-
 .hero h1 {
   max-width: 16ch;
 }
@@ -637,6 +623,19 @@ nav a[aria-current] {
 .sample-label {
   font-size: .8rem;
   font-weight: 700;
+}
+
+.result-panel {
+  scroll-margin-top: 16px;
+}
+
+.result-panel:focus-within {
+  outline: 2px solid var(--blue);
+  outline-offset: 3px;
+}
+
+.result-panel h2:focus {
+  outline: none;
 }
 
 .result-panel h2 {

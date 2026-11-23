@@ -10,6 +10,9 @@ function featureValues(raw, field) {
   if (!values.length || values.some(v => !field.choices.includes(v))) {
     throw new Error(`${field.label || field.key}: pilih kode yang tersedia.`)
   }
+  if (field.max && values.length > field.max) {
+    throw new Error(`${field.label || field.key}: maksimal ${field.max} pilihan.`)
+  }
   return values
 }
 

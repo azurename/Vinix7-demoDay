@@ -25,7 +25,10 @@ function showResult(result) {
   const target = get('profile-result')
   const heading = element('div', null, 'result-heading')
   heading.append(element('p', 'HASIL PREDIKSI', 'eyebrow'), element('span', 'Model demo', 'sample-label'))
-  target.replaceChildren(heading, element('h2', titles[result.label]))
+  const title = element('h2', titles[result.label])
+  title.tabIndex = -1
+  title.setAttribute('aria-label', `Hasil prediksi: ${titles[result.label]}`)
+  target.replaceChildren(heading, title)
   model.classes.forEach((key, i) => {
     const prob = element('div', null, 'prob')
     const summary = element('div')
@@ -39,6 +42,8 @@ function showResult(result) {
     target.append(prob)
   })
   target.append(element('p', 'Batang menunjukkan skor model. Prediksi akhir menggunakan pengali kelas, jadi hasil bisa berbeda dari batang terbesar.', 'note'))
+  title.focus({ preventScroll: true })
+  target.scrollIntoView({ block: 'start', behavior: 'instant' })
 }
 
 function renderFields(features) {
@@ -46,7 +51,7 @@ function renderFields(features) {
     const fieldset = element('fieldset')
     fieldset.append(element('legend', field.label))
     if (field.multi) {
-      const hint = element('p', 'Pilih minimal satu opsi.', 'field-hint')
+      const hint = element('p', field.max ? `Pilih 1 sampai ${field.max} opsi.` : 'Pilih minimal satu opsi.', 'field-hint')
       hint.id = `feature-hint-${i}`
       fieldset.setAttribute('aria-describedby', hint.id)
       const choices = element('div', null, 'choices')
@@ -58,6 +63,15 @@ function renderFields(features) {
         input.value = code
         label.append(input, document.createTextNode(' ' + field.choiceLabels[code]))
         choices.append(label)
+      }
+      if (field.max) {
+        const boxes = [...choices.querySelectorAll('input')]
+        const enforceLimit = () => {
+          const checked = boxes.filter(input => input.checked).length
+          for (const input of boxes) input.disabled = !input.checked && checked >= field.max
+        }
+        boxes.forEach(input => input.addEventListener('change', enforceLimit))
+        enforceLimit()
       }
       fieldset.append(hint, choices)
     } else {

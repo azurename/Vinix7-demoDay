@@ -43,10 +43,29 @@ window.addEventListener('DOMContentLoaded', async () => {
    } else controls[0].value = value;
   }
   if (!form.checkValidity()) throw Error('valid fixture rejected by form');
-  form.requestSubmit();
-  const prediction = get('profile-result').querySelector('h2')?.textContent;
-  const scores = [...get('profile-result').querySelectorAll('.prob strong')].map(el => el.textContent);
+  const resultPanel = get('profile-result');
+  const submit = get('profile-submit');
+  const firstMulti = named.find(el => el.type === 'checkbox');
+  const selected = named.filter(el => el.name === firstMulti.name && el.checked);
+  for (const el of selected) el.checked = false;
+  submit.click();
+  if (document.activeElement !== firstMulti || !get('form-message').textContent) throw Error('invalid submit did not focus the missing answer');
+  for (const el of selected) el.checked = true;
+
+  submit.focus();
+  submit.scrollIntoView({block: 'center', behavior: 'instant'});
+  const before = scrollY;
+  const initialTop = resultPanel.getBoundingClientRect().top;
+  if (before <= 0) throw Error('fixture must start scrolled down at the submit button');
+  submit.click();
+  const prediction = resultPanel.querySelector('h2')?.textContent;
+  const scores = [...resultPanel.querySelectorAll('.prob strong')].map(el => el.textContent);
   if (!['Hybrid','Onsite','Remote'].includes(prediction) || scores.length !== 3) throw Error('form did not show a real model result');
+  if (!resultPanel.contains(document.activeElement)) throw Error('valid submit did not move focus to the result');
+  const headingBounds = resultPanel.querySelector('h2').getBoundingClientRect();
+  if (headingBounds.top < 0 || headingBounds.bottom > innerHeight) throw Error('result heading is outside the viewport after submit');
+  if (initialTop < 0 && scrollY >= before) throw Error('result above the form button did not scroll up');
+  if (location.hash !== '#individu') throw Error('valid submit changed the active page');
   if (document.documentElement.scrollWidth > window.innerWidth) throw Error('form overflow');
   history.replaceState(null, '', '#excel'); showScreen();
   phase('batch-good');
